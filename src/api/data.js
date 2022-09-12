@@ -52,9 +52,9 @@ export async function updateQuizById(id, data) {
 
 export async function getQuestionsByQuizId(quizId) {
     const query = JSON.stringify({ quiz: createPointer('Quiz', quizId) });
-    const response = await api.get(host + '/classes/Question?where=', encodeURIComponent(query));
-    return response.result;
-    // Add query string to url with 
+    const response = await api.get(host + '/classes/Question?where=' + encodeURIComponent(query));
+    return response.results;
+    // Add query string to url with encoded pointer
 }
 
 export async function createQuestion(quizId, question) {
