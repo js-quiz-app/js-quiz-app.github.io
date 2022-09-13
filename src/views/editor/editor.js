@@ -36,20 +36,20 @@ const editorTemplate = (questions) => html`
 `;
 
 const questionList = (questions) => html`
-                    <div class="pad-large alt-page">
-                    
-                        ${questions.map((q, i) => createQuestion(q, i + 1, false))}
-                    
-                        <article class="editor-question">
-                            <div class="editor-input">
-                                <button class="input submit action">
-                                    <i class="fas fa-plus-circle"></i>
-                                    Add question
-                                </button>
-                            </div>
-                        </article>
-                    
-                    </div>
+    <div class="pad-large alt-page">
+    
+        ${questions.map((q, i) => createQuestion(q, i + 1, false))}
+    
+        <article class="editor-question">
+            <div class="editor-input">
+                <button class="input submit action">
+                    <i class="fas fa-plus-circle"></i>
+                    Add question
+                </button>
+            </div>
+        </article>
+    
+    </div>
 `
 const questions = [
     {
