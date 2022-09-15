@@ -1,7 +1,7 @@
 import { html } from '../../lib.js';
 import { createQuestion } from './question.js';
 
-const editorTemplate = (questions) => html`
+const editorTemplate = (questions, addQuestion) => html`
             <section id="editor">
             
                 <header class="pad-large">
@@ -30,19 +30,19 @@ const editorTemplate = (questions) => html`
                     <h2>Questions</h2>
                 </header>
             
-                ${questionList(questions)}
+                ${questionList(questions, addQuestion)}
             
             </section>
 `;
 
-const questionList = (questions) => html`
+const questionList = (questions, addQuestion) => html`
     <div class="pad-large alt-page">
     
-        ${questions.map((q, i) => createQuestion(q, i + 1, false))}
+        ${questions}
     
         <article class="editor-question">
             <div class="editor-input">
-                <button class="input submit action">
+                <button @click=${addQuestion} class="input submit action">
                     <i class="fas fa-plus-circle"></i>
                     Add question
                 </button>
@@ -73,5 +73,30 @@ const questions = [
 ]
 
 export async function editorPage(ctx) {
-    ctx.render(editorTemplate(questions));
+    const currentQuestions = questions.map(q => createQuestion(q, removeQuestion));
+    update();
+
+
+    async function addQuestion(ev) {
+        currentQuestions.push(createQuestion({
+            text: '',
+            answers: [],
+            correctIndex: 0
+        }, removeQuestion));
+        update();
+    }
+
+    async function removeQuestion(index) {
+
+        const confirmed = confirm('Are you sure you want to delete this question?');
+        if (confirmed) {
+            currentQuestions.splice(index, 1);
+            update();
+        }
+    }
+
+    function update() {
+        ctx.render(editorTemplate(currentQuestions.map((c, i) => c(i)), addQuestion));
+    }
+
 }

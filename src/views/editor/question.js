@@ -52,39 +52,43 @@ const radioView = (value, checked) => html`
 
 
 
-export function createQuestion(question, index, edit) {
+export function createQuestion(question, removeQuestion) {
+    let index = 0;
+    let editorActive = false;
     const element = document.createElement('article');
     element.className = 'editor-question';
 
-    if (edit) {
-        showEditor();
-    } else {
-        showView();
-    }
+    showView();
 
-    return element;
+    return update;
+
+
+    function update(newIndex) {
+        index = newIndex;
+
+        if (editorActive) {
+            showEditor();
+        } else {
+            showView();
+        }
+
+        return element;
+    }
 
     async function onEdit() {
+        editorActive = true;
         showEditor();
-    }
-
-    async function onDelete() {
-        const confirmed = confirm('Are you sure you want to delete this question?');
-
-        if (confirmed) {
-            element.remove();
-        }
     }
 
     async function onSave() {
         const formData = new FormData(element.querySelector('form'));
 
-        const data = [...formData.entries()]
-            .reduce((a, [k, v]) => Object.assign(a, { [k]: v }), {});
+        const data = [...formData.entries()].reduce((a, [k, v]) => Object.assign(a, { [k]: v }), {});
         console.log(data);
     }
 
     function onCancel(ev) {
+        editorActive = false;
         showView();
     }
 
@@ -92,7 +96,7 @@ export function createQuestion(question, index, edit) {
 
 
     function showView() {
-        render(viewTemplate(question, index, onEdit, onDelete), element);
+        render(viewTemplate(question, index, onEdit, removeQuestion), element);
     }
 
     function showEditor() {
