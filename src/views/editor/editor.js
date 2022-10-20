@@ -1,7 +1,7 @@
 import { html } from '../../lib.js';
-import { createQuestion } from './question.js';
+import {createList} from './list.js';
 
-const editorTemplate = (questions, addQuestion) => html`
+const editorTemplate = (questions) => html`
             <section id="editor">
             
                 <header class="pad-large">
@@ -26,31 +26,14 @@ const editorTemplate = (questions, addQuestion) => html`
                     </form>
                 </div>
             
-                <header class="pad-large">
-                    <h2>Questions</h2>
-                </header>
+
             
-                ${questionList(questions, addQuestion)}
+                ${createList(questions)}
             
             </section>
 `;
 
-const questionList = (questions, addQuestion) => html`
-    <div class="pad-large alt-page">
-    
-        ${questions}
-    
-        <article class="editor-question">
-            <div class="editor-input">
-                <button @click=${addQuestion} class="input submit action">
-                    <i class="fas fa-plus-circle"></i>
-                    Add question
-                </button>
-            </div>
-        </article>
-    
-    </div>
-`
+
 const questions = [
     {
         text: 'Is this the first question?',
@@ -73,30 +56,5 @@ const questions = [
 ]
 
 export async function editorPage(ctx) {
-    const currentQuestions = questions.map(q => createQuestion(q, removeQuestion));
-    update();
-
-
-    async function addQuestion(ev) {
-        currentQuestions.push(createQuestion({
-            text: '',
-            answers: [],
-            correctIndex: 0
-        }, removeQuestion));
-        update();
-    }
-
-    async function removeQuestion(index) {
-
-        const confirmed = confirm('Are you sure you want to delete this question?');
-        if (confirmed) {
-            currentQuestions.splice(index, 1);
-            update();
-        }
-    }
-
-    function update() {
-        ctx.render(editorTemplate(currentQuestions.map((c, i) => c(i)), addQuestion));
-    }
-
+    ctx.render(editorTemplate(questions));
 }

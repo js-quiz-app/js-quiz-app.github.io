@@ -15,7 +15,7 @@ const editorTemplate = (data, index, onSave, onCancel) => html`
         .value=${data.text}></textarea>
 
     <!-- radaio edit map -->
-    ${createAnswerList(data.answers, index, data.correctIndex)}
+    ${createAnswerList(data, index)}
 
 </form>
 `;
@@ -53,6 +53,8 @@ const radioView = (value, checked) => html`
 
 
 export function createQuestion(question, removeQuestion) {
+    let cuurrentQuestion = JSON.parse(JSON.stringify(question));
+
     let index = 0;
     let editorActive = false;
     const element = document.createElement('article');
@@ -89,17 +91,16 @@ export function createQuestion(question, removeQuestion) {
 
     function onCancel(ev) {
         editorActive = false;
+        cuurrentQuestion = JSON.parse(JSON.stringify(question));
         showView();
     }
 
 
-
-
     function showView() {
-        render(viewTemplate(question, index, onEdit, removeQuestion), element);
+        render(viewTemplate(cuurrentQuestion, index, onEdit, removeQuestion), element);
     }
 
     function showEditor() {
-        render(editorTemplate(question, index, onSave, onCancel), element);
+        render(editorTemplate(cuurrentQuestion, index, onSave, onCancel), element);
     }
 }

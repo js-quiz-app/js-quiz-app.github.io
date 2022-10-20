@@ -5,8 +5,10 @@ import { editorPage } from './views/editor/editor.js';
 const main = document.getElementById('content');
 
 
-page('/', decorateContext, editorPage);
+page('/create', decorateContext, editorPage);
+page('/edit/:id', decorateContext, editorPage);
 page.start();
+page.redirect('/create');
 
 function decorateContext(ctx, next) {
     ctx.render = (content) => render(content, main);
