@@ -5,16 +5,17 @@ const radioEdit = (questionIndex, index, value, checked) => html`
     <div class="editor-input">
     
         <label class="radio">
-            <input class="input" type="radio" name=${`question-${questionIndex}`} value=${index} />
+            <input class="input" type="radio" name=${`question-${questionIndex}`} value=${index} ?checked=${checked} />
             <i class="fas fa-check-circle"></i>
         </label>
     
-        <input class="input" type="text" name=${`answer-${index}`} .value=${value} ?checked=${checked} />
+        <input class="input" type="text" name=${`answer-${index}`} .value=${value} />
         <button data-index=${index} class="input submit action"><i class="fas fa-trash-alt"></i></button>
     </div>
     `
 
 export function createAnswerList(data, questionIndex) {
+    
     const answers = data.answers
     const element = document.createElement('div');
     element.addEventListener('click', onDelete);
@@ -31,7 +32,7 @@ export function createAnswerList(data, questionIndex) {
                     <i class="fas fa-plus-circle"></i>
                     Add answer
                 </button>
-            </div>
+            </div> 
     `, element)
     }
 
@@ -40,7 +41,7 @@ export function createAnswerList(data, questionIndex) {
         if (e.target.getAttribute('type') == 'text') {
             const index = Number(e.target.name.split('-')[1]);
             answers[index] = e.target.value || '';
-        } else if(e.target.getAttribute('type') == 'radio') {
+        } else if (e.target.getAttribute('type') == 'radio') {
             data.correctIndex = Number(e.target.value);
         }
 

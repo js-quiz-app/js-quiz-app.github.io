@@ -48,7 +48,6 @@ export async function createList(questions) {
     }
 
     function update() {
-
         render(questionList(currentQuestions.map((c, i) => c(i)), addQuestion), element);
     }
 }

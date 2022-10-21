@@ -74,7 +74,7 @@ export function createQuestion(question, removeQuestion) {
             showView();
         }
 
-        return element;
+        return    ;
     }
 
     async function onEdit() {
