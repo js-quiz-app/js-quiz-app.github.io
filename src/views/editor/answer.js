@@ -2,21 +2,18 @@ import { html, render } from '../../lib.js';
 
 
 const radioEdit = (questionIndex, index, value, checked) => html`
-    <div class="editor-input">
-    
-        <label class="radio">
-            <input class="input" type="radio" name=${`question-${questionIndex}`} value=${index} ?checked=${checked} />
-            <i class="fas fa-check-circle"></i>
-        </label>
-    
-        <input class="input" type="text" name=${`answer-${index}`} .value=${value} />
-        <button data-index=${index} class="input submit action"><i class="fas fa-trash-alt"></i></button>
-    </div>
-    `
+<div class="editor-input">
+    <label class="radio">
+        <input class="input" type="radio" name=${`question-${questionIndex}`} value=${index} ?checked=${checked} />
+        <i class="fas fa-check-circle"></i>
+    </label>
+
+    <input class="input" type="text" name=${`answer-${index}`} .value=${value} />
+    <button data-index=${index} class="input submit action"><i class="fas fa-trash-alt"></i></button>
+</div>`;
 
 export function createAnswerList(data, questionIndex) {
-    
-    const answers = data.answers
+    const answers = data.answers;
     const element = document.createElement('div');
     element.addEventListener('click', onDelete);
     element.addEventListener('change', onChange);
@@ -32,19 +29,18 @@ export function createAnswerList(data, questionIndex) {
                     <i class="fas fa-plus-circle"></i>
                     Add answer
                 </button>
-            </div> 
-    `, element)
+            </div>`,
+            element
+        );
     }
 
     function onChange(e) {
-
         if (e.target.getAttribute('type') == 'text') {
             const index = Number(e.target.name.split('-')[1]);
             answers[index] = e.target.value || '';
-        } else if (e.target.getAttribute('type') == 'radio') {
+        } else {
             data.correctIndex = Number(e.target.value);
         }
-
     }
 
     function addAnswer(e) {
@@ -59,12 +55,10 @@ export function createAnswerList(data, questionIndex) {
             target = target.parentNode;
         }
         const index = target.dataset.index;
-        console.log(index);
         if (index != undefined) {
             e.preventDefault();
             answers.splice(index, 1);
             update();
         }
     }
-
 }

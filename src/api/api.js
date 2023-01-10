@@ -1,92 +1,91 @@
+import { setUserData, clearUserData, getUserData } from '../util.js';
+
+
 export const settings = {
-    host: ''
+    host: '',
+    appId: '',
+    apiKey: '',
 };
 
 async function request(url, options) {
     try {
         const response = await fetch(url, options);
-        if (response.ok === false) {
-            const err = await response.json();
-            alert(err.message);
-            throw new Error(err.message);
+
+        if (response.ok == false) {
+            const error = await response.json();
+            throw new Error(error.message);
         }
 
         try {
-            return await response.json();
+            const data = await response.json();
+            return data;
         } catch (err) {
             return response;
         }
     } catch (err) {
-        alert(err.message)
+        alert(err.message);
         throw err;
     }
 }
 
-function createOptions(method = 'GET', data) {
-    const result = {
+function getOptions(method = 'get', body) {
+    const options = {
         method,
         headers: {
-            'X-Parse-Application-Id': 'hiNTtGdut8ASkfzAft80aJ1klcrnu2ghCtWcb9yN',
-            'X-Parse-REST-API-Key': 'b1V3Q5cuFipCWjSPi4xvNpxNOb2wHh7sThut1pLD'
+            'X-Parse-Application-Id': settings.appId,
+            'X-Parse-REST-API-Key': settings.apiKey
         }
     };
 
-    if (data) {
-        result.headers['Content-Type'] = 'application/json';
-        result.body = JSON.stringify(data);
+    const user = getUserData();
+    if (user) {
+        options.headers['X-Parse-Session-Token'] = user.sessionToken;
     }
 
-    const token = sessionStorage.getItem('authToken');
-    if (token != null) {
-        result.headers['X-Parse-Session-Token'] = token;
+    if (body) {
+        options.headers['Content-Type'] = 'application/json';
+        options.body = JSON.stringify(body);
     }
+
+    return options;
+}
+
+export async function get(url) {
+    return await request(url, getOptions());
+}
+
+export async function post(url, data) {
+    return await request(url, getOptions('post', data));
+}
+
+export async function put(url, data) {
+    return await request(url, getOptions('put', data));
+}
+
+export async function del(url) {
+    return await request(url, getOptions('delete'));
+}
+
+export async function login(username, password) {
+    const result = await post(settings.host + '/login', { username, password });
+
+    setUserData(Object.assign({}, result, { username }));
 
     return result;
 }
 
-export async function get(url) {
-    return request(url, createOptions());
-}
-
-export async function post(url, data) {
-    return request(url, createOptions('POST', data));
-}
-
-export async function put(url, data) {
-    return request(url, createOptions('PUT', data));
-}
-
-export async function del(url) {
-    return request(url, createOptions('DELETE'));
-}
-
 export async function register(email, username, password) {
-    const response = await post(settings.host + '/users', { email, username, password });
-    
-    sessionStorage.setItem('authToken', response.sessionToken);
-    sessionStorage.setItem('username', username);
-    sessionStorage.setItem('userId', response.objectId);
+    const result = await post(settings.host + '/users', { email, username, password });
 
+    setUserData(Object.assign({}, result, { username }));
 
-    return response;
-}
-
-export async function login(username, password) {
-    const response = await post(settings.host + '/login', { username, password });
-
-    sessionStorage.setItem('authToken', response.sessionToken);
-    sessionStorage.setItem('username', username);
-    sessionStorage.setItem('userId', response.objectId);
-
-    return response;
+    return result;
 }
 
 export async function logout() {
-    const response = await post(settings.host + '/logout', {});
+    const result = post(settings.host + '/logout', {});
 
-    sessionStorage.removeItem('authToken');
-    sessionStorage.removeItem('username');
-    sessionStorage.removeItem('userId');
+    clearUserData();
 
-    return response;
+    return result;
 }
