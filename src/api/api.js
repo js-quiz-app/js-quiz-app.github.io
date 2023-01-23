@@ -32,8 +32,8 @@ function getOptions(method = 'get', body) {
     const options = {
         method,
         headers: {
-            'X-Parse-Application-Id': settings.appId,
-            'X-Parse-REST-API-Key': settings.apiKey
+        //     'X-Parse-Application-Id': settings.appId,
+        //     'X-Parse-REST-API-Key': settings.apiKey
         }
     };
 
@@ -67,7 +67,7 @@ export async function del(url) {
 }
 
 export async function login(username, password) {
-    const result = await post(settings.host + '/login', { username, password });
+    const result = await post(settings.host + '/users/login', { username, password });
 
     setUserData(Object.assign({}, result, { username }));
 
@@ -75,7 +75,7 @@ export async function login(username, password) {
 }
 
 export async function register(email, username, password) {
-    const result = await post(settings.host + '/users', { email, username, password });
+    const result = await post(settings.host + '/users/register', { email, username, password });
 
     setUserData(Object.assign({}, result, { username }));
 
@@ -83,7 +83,7 @@ export async function register(email, username, password) {
 }
 
 export async function logout() {
-    const result = post(settings.host + '/logout', {});
+    const result = await post(settings.host + '/users/logout', {});
 
     clearUserData();
 

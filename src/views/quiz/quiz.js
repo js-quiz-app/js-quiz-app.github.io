@@ -14,7 +14,7 @@ const quizTemplate = (quiz, questions, answers, currentIndex, onSelect, resetQui
         </nav>
     </header>
     <div class="pad-large alt-page">
-
+        
         <article class="question">
             <p class="q-text">
                 ${questions[currentIndex].text}
@@ -66,7 +66,7 @@ const answerTemplate = (questionIndex, index, text) => html`
     <i class="fas fa-check-circle"></i>
     ${text}
 </label>`;
-
+ 
 
 export async function quizPage(ctx) {
     const index = Number(ctx.querystring.split('=')[1] || 1) - 1;

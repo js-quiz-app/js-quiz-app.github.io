@@ -1,10 +1,8 @@
 import * as api from './api.js';
 
-
-const host = 'https://parseapi.back4app.com';
+const host = 'http://localhost:3030';
 api.settings.host = host;
-api.settings.appId = 'C5El0gpny7zVGYZyuy4ElduX5yVNiUYgndL6mbOA';
-api.settings.apiKey = 'xlUA5jfBbIvbaNMRU7TXOAwN2jBEB31t9wa2yjYu';
+
 
 export const login = api.login;
 export const register = api.register;
@@ -20,30 +18,29 @@ function createPointer(name, id) {
 }
 
 function addOwner(object) {
-    const userId = sessionStorage.getItem('userId');
-    const result = Object.assign({}, object);
-    result.owner = createPointer('_User', userId);
+    const userId = JSON.parse(sessionStorage.getItem('user')).objectId;
+
+    const result = Object.assign({}, { ...object, owner: userId });
     return result;
 }
 
-
 // Quiz Collection
 export async function getQuizes() {
-    const quizes = (await api.get(host + '/classes/Quiz')).results;
+    const quizes = await api.get(host + '/classes/Quiz');
     const taken = await getSolutionCount(quizes.map(q => q.objectId));
     quizes.forEach(q => q.taken = taken[q.objectId]);
     return quizes;
 }
 
 export async function getQuizById(id) {
-    return await api.get(host + '/classes/Quiz/' + id + '?include=owner');
+    return await api.get(host + '/classes/Quiz/' + id);
 }
 
 export async function getMostRecent() {
-    const quiz = (await api.get(host + '/classes/Quiz?order=-createdAt&limit=1')).results[0];
+    const quiz = await api.get(host + '/classes/Quiz?order=createdAt&limit=1');
     if (quiz) {
-        const taken = await getSolutionCount([quiz.objectId]);
-        quiz.taken = taken[quiz.objectId];
+        const taken = await getSolutionCount([quiz[0].objectId]);
+        quiz[0].taken = taken[quiz[0].objectId];
     }
     return quiz;
 }
@@ -72,12 +69,13 @@ export async function getQuestionsByQuizId(quizId, ownerId) {
         owner: createPointer('_User', ownerId)
     });
     const response = await api.get(host + '/classes/Question?where=' + encodeURIComponent(query));
-    return response.results;
+    return response;
 }
 
 export async function createQuestion(quizId, question) {
     const body = addOwner(question);
-    body.quiz = createPointer('Quiz', quizId);
+    body.quiz = quizId;
+
     return await api.post(host + '/classes/Question', body);
 }
 
@@ -94,7 +92,7 @@ export async function deleteQuestion(id) {
 export async function getSolutionsByUserId(userId) {
     const query = JSON.stringify({ owner: createPointer('_User', userId) });
     const response = await api.get(host + '/classes/Solution?where=' + encodeURIComponent(query));
-    return response.results;
+    return response;
 }
 
 export async function getSolutionsByQuizId(quizId) {
@@ -106,14 +104,18 @@ export async function getSolutionsByQuizId(quizId) {
 export async function submitSolution(quizId, solution) {
     const body = addOwner(solution);
     body.quiz = createPointer('Quiz', quizId);
+
     return await api.post(host + '/classes/Solution', body);
 }
 
 export async function getSolutionCount(quizIds) {
-    const query = JSON.stringify({ $or: quizIds.map(id => ({ quiz: createPointer('Quiz', id) })) });
-    const solutions = (await api.get(host + '/classes/Solution?where=' + encodeURIComponent(query))).results;
+    const query = JSON.stringify({
+        $or: quizIds.map(id => ({ quiz: id }))
+    });
+
+    const solutions = await api.get(host + '/classes/Solution?where=' + encodeURIComponent(query));
     const result = solutions.reduce((a, c) => {
-        const id = c.quiz.objectId;
+        const id = c.quiz;
         if (!a[id]) { a[id] = 0; }
         a[id]++;
         return a;

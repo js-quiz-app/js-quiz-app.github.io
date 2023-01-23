@@ -18,7 +18,8 @@ const homeTemplate = () => html`<section id="welcome">
 
     ${until(loadRecent(), cube())}
 
-</section>`;
+</section>
+`;
 
 async function loadStats() {
     const stats = await getStats();
@@ -33,8 +34,13 @@ async function loadRecent() {
     <div class="pad-large alt-page">
         <h2>Our most recent quiz:</h2>
     
-        ${recent ? quizTemplate(recent) : html`
-        <p>No quizes yet. Be the first to create one!</p>`}
+        ${
+            recent.length > 0 ? 
+            quizTemplate(recent[0]) : 
+            html`
+                <p>No quizes yet. Be the first to create one!</p>
+            `
+        }
     
         <div>
             <a class="action cta" href="/browse">Browse all quizes</a>

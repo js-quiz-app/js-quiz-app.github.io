@@ -11,6 +11,9 @@ import { resultPage } from './views/quiz/result.js';
 import { homePage } from './views/home.js';
 import { detailsPage } from './views/quiz/details.js';
 
+import * as api from './api/data.js';
+window.api = api;
+
 const state = {};
 const main = document.getElementById('content');
 setUserNav();
@@ -29,14 +32,13 @@ page('/edit/:id', editorPage);
 
 page.start();
 
-
 async function getQuiz(ctx, next) {
     ctx.clearCache = clearCache;
     const quizId = ctx.params.id;
     if (state[quizId] == undefined) {
         ctx.render(cube());
         state[quizId] = await getQuizById(quizId);
-        const ownerId = state[quizId].owner.objectId;
+        const ownerId = state[quizId].owner._id;
         state[quizId].questions = await getQuestionsByQuizId(quizId, ownerId);
         state[quizId].answers = state[quizId].questions.map(q => undefined);
     }

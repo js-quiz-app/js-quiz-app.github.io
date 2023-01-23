@@ -23,7 +23,6 @@ const detailsTemplate = (quiz) => html`
 
 async function loadCount(quiz) {
     const taken = (await getSolutionCount([quiz.objectId]))[quiz.objectId] || 0;
-
     return html`
     <div class="quiz-meta">
         <span>${quiz.questionCount} question${quiz.questionCount == 1 ? '' : 's'}</span>

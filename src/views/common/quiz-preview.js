@@ -16,4 +16,4 @@ export const quizTemplate = (quiz) => html`
             <span>Taken ${quiz.taken} time${quiz.taken == 1 ? '' : 's'}</span>
         </div>
     </div>
-</article>`;
+</article>`;1

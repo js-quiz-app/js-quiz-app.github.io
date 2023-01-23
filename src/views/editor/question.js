@@ -114,6 +114,7 @@ export function createQuestion(quizId, question, removeQuestion, updateCount, ed
             currentQuestion = copyQuestion(question);
             editorActive = false;
             update(index);
+            
         } catch (err) {
             console.error(err);
         } finally {
