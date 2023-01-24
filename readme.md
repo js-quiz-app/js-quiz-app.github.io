@@ -5,17 +5,17 @@ Application for creating, managing and completing tests with free access.
 ## Featues
 * HTML, CSS, JavaScript
 * lit-html, page
-* GitHub Pages, (CUSTOM BACKEND)
+* GitHub Pages, quiz-fever-rest-server (express app)
 
 ## Pages 
-* **Welcome Screen** 
-* **Login/Regsiter** 
-* **Quiz Browser** 
-* **Quiz Details** 
-* **Quiz Contest Mode** 
-* **Quiz Results**
-* **Profile Page** 
-* **Quiz Editor**
+* Welcome Screen
+* Login/Regsiter
+* Quiz Browser
+* Quiz Details
+* Quiz Contest Mode
+* Quiz Results
+* Profile Page
+* Quiz Editor
 
 
 ## Access control
