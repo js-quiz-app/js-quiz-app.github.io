@@ -2,6 +2,7 @@ import { html, styleMap, classMap } from '../../lib.js';
 
 import { submitSolution } from '../../api/data.js';
 import { cube } from '../common/loader.js';
+import { getUserData } from '../../util.js';
 
 
 const quizTemplate = (quiz, questions, answers, currentIndex, onSelect, resetQuiz, onSubmit) => html`
@@ -114,8 +115,12 @@ export async function quizPage(ctx) {
         };
 
         ctx.render(cube());
-        await submitSolution(ctx.quiz.objectId, solution);
+
+        if(ctx.user) {
+            await submitSolution(ctx.quiz.objectId, solution);
+        } 
         ctx.page.redirect('/summary/' + ctx.quiz.objectId);
+    
     }
 
     function update() {

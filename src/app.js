@@ -27,8 +27,8 @@ page('/browse', browsePage);
 page('/details/:id', getQuiz, detailsPage);
 page('/quiz/:id', getQuiz, quizPage);
 page('/summary/:id', getQuiz, resultPage);
-page('/create', editorPage);
-page('/edit/:id', editorPage);
+page('/create', isUser,editorPage);
+page('/edit/:id',isUser, editorPage);
 
 page.start();
 
@@ -70,6 +70,13 @@ function setUserNav() {
         document.getElementById('user-nav').style.display = 'none';
         document.getElementById('guest-nav').style.display = 'block';
     }
+}
+
+function isUser(ctx, next) {
+    if(ctx.user) {
+        next();    
+    }
+    ctx.page.redirect('/');
 }
 
 async function logout() {

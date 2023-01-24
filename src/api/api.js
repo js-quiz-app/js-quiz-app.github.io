@@ -31,10 +31,7 @@ async function request(url, options) {
 function getOptions(method = 'get', body) {
     const options = {
         method,
-        headers: {
-        //     'X-Parse-Application-Id': settings.appId,
-        //     'X-Parse-REST-API-Key': settings.apiKey
-        }
+        headers: {}
     };
 
     const user = getUserData();
