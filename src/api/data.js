@@ -1,6 +1,6 @@
 import * as api from './api.js';
 
-const host = 'http://localhost:3030';
+const host = 'https://js-quiz-app.cyclic.app';
 api.settings.host = host;
 
 
