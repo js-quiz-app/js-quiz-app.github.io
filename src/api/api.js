@@ -2,9 +2,7 @@ import { setUserData, clearUserData, getUserData } from '../util.js';
 
 
 export const settings = {
-    host: '',
-    appId: '',
-    apiKey: '',
+    host: ''
 };
 
 async function request(url, options) {
