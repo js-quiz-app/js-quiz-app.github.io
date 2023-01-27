@@ -39,8 +39,8 @@ export async function getQuizById(id) {
 export async function getMostRecent() {
     const quiz = await api.get(host + '/classes/Quiz?order=createdAt&limit=1');
     if (quiz) {
-        const taken = await getSolutionCount([quiz[0].objectId]);
-        quiz[0].taken = taken[quiz[0].objectId];
+        const taken = await getSolutionCount([quiz[0]?.objectId]) || 0;
+        quiz[0].taken = taken[quiz[0]?.objectId];
     }
     return quiz;
 }
