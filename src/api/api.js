@@ -1,6 +1,5 @@
 import { setUserData, clearUserData, getUserData } from '../util.js';
 
-
 export const settings = {
     host: ''
 };

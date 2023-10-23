@@ -1,6 +1,6 @@
 import * as api from './api.js';
 
-const host = 'https://js-quiz-app.cyclic.app';
+const host = 'https://quiz-app-eppr.onrender.com';
 api.settings.host = host;
 
 
