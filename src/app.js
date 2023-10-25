@@ -10,9 +10,7 @@ import { cube } from './views/common/loader.js';
 import { resultPage } from './views/quiz/result.js';
 import { homePage } from './views/home.js';
 import { detailsPage } from './views/quiz/details.js';
-
-import * as api from './api/data.js';
-window.api = api;
+import { notFound } from './views/quiz/notFound.js';
 
 const state = {};
 const main = document.getElementById('content');
@@ -27,8 +25,9 @@ page('/browse', browsePage);
 page('/details/:id', getQuiz, detailsPage);
 page('/quiz/:id', getQuiz, quizPage);
 page('/summary/:id', getQuiz, resultPage);
-page('/create', isUser,editorPage);
-page('/edit/:id',isUser, editorPage);
+page('/create', isUser, editorPage);
+page('/edit/:id', isUser, editorPage);
+page('*', notFound);
 
 page.start();
 
@@ -73,8 +72,8 @@ function setUserNav() {
 }
 
 function isUser(ctx, next) {
-    if(ctx.user) {
-        next();    
+    if (ctx.user) {
+        next();
     }
     ctx.page.redirect('/');
 }
