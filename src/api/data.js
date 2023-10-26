@@ -1,7 +1,7 @@
 import * as api from './api.js';
 
-// const host = 'https://quiz-app-eppr.onrender.com';
-const host = 'http://localhost:3030';
+const host = 'https://quiz-rest-api.onrender.com';
+// const host = 'http://localhost:3030';
 api.settings.host = host;
 
 
