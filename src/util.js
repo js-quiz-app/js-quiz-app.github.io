@@ -7,7 +7,7 @@ const topics = {
 };
 
 function getUserData() {
-    const user = sessionStorage.getItem('user');
+    const user = localStorage.getItem('user');
     if (user) {
         return JSON.parse(user);
     } else {
@@ -16,11 +16,11 @@ function getUserData() {
 }
 
 function setUserData(user) {
-    sessionStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem('user', JSON.stringify(user));
 }
 
 function clearUserData() {
-    sessionStorage.removeItem('user');
+    localStorage.removeItem('user');
 }
 
 export {

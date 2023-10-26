@@ -16,8 +16,10 @@ const resultTemplate = (quiz, result) => html`
                 ${result.correct}/${result.total} correct answers
             </div>
 
-            <a class="action cta" href="#"><i class="fas fa-sync-alt"></i> Retake Quiz</a>
-            <a class="action cta" href="#"><i class="fas fa-clipboard-list"></i> See Details</a>
+            <a class="action cta" href=${`/details/${quiz._id}`}><i class="fas fa-sync-alt"></i> Retake Quiz</a>
+            ${
+            // <a class="action cta" href="#"><i class="fas fa-clipboard-list"></i> See Details</a>
+            ''}
 
         </article>
     </div>
@@ -98,6 +100,7 @@ export async function resultPage(ctx) {
     const questions = ctx.quiz.questions;
     const answers = ctx.quiz.answers;
     const correct = answers.reduce((r, c, i) => r + Number(questions[i].correctIndex == c), 0);
+
     ctx.render(resultTemplate(ctx.quiz, {
         percent: (correct / questions.length * 100).toFixed(0),
         correct,

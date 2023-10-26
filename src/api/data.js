@@ -1,6 +1,7 @@
 import * as api from './api.js';
 
-const host = 'https://quiz-app-eppr.onrender.com';
+// const host = 'https://quiz-app-eppr.onrender.com';
+const host = 'http://localhost:3030';
 api.settings.host = host;
 
 
@@ -18,7 +19,7 @@ function createPointer(name, id) {
 }
 
 function addOwner(object) {
-    const userId = JSON.parse(sessionStorage.getItem('user')).objectId;
+    const userId = JSON.parse(localStorage.getItem('user')).objectId;
 
     const result = Object.assign({}, { ...object, owner: userId });
     return result;
@@ -37,7 +38,7 @@ export async function getQuizById(id) {
 }
 
 export async function getMostRecent() {
-    const quiz = await api.get(host + '/classes/Quiz?order=createdAt&limit=1');
+    const quiz = await api.get(host + '/classes/Quiz/most-recent');
     if (quiz) {
         const taken = await getSolutionCount([quiz[0]?.objectId]) || 0;
         quiz[0].taken = taken[quiz[0].objectId] || 0;
