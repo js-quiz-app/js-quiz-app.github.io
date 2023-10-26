@@ -10,11 +10,14 @@ import { cube } from './views/common/loader.js';
 import { resultPage } from './views/quiz/result.js';
 import { homePage } from './views/home.js';
 import { detailsPage } from './views/quiz/details.js';
-import { notFound } from './views/quiz/notFound.js';
+import { profilePage } from './views/profile.js';
+import { notFound } from './views/notFound.js';
 
 const state = {};
 const main = document.getElementById('content');
+
 setUserNav();
+
 document.getElementById('logoutBtn').addEventListener('click', logout);
 
 page('*', decorateContext);
@@ -25,8 +28,9 @@ page('/browse', browsePage);
 page('/details/:id', getQuiz, detailsPage);
 page('/quiz/:id', getQuiz, quizPage);
 page('/summary/:id', getQuiz, resultPage);
-page('/create', isUser, editorPage);
+page('/create',isUser, editorPage);
 page('/edit/:id', isUser, editorPage);
+page('/users/:id',isUser, profilePage);
 page('*', notFound);
 
 page.start();
@@ -73,9 +77,9 @@ function setUserNav() {
 
 function isUser(ctx, next) {
     if (ctx.user) {
-        next();
+        return next();
     }
-    ctx.page.redirect('/');
+    ctx.page.redirect('/login');
 }
 
 async function logout() {
