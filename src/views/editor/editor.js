@@ -29,7 +29,8 @@ const quizEditorTemplate = (quiz, onSave, working) => html`
         <span class="label-col">Topic:</span>
         <select class="input i-med" name="topic" .value=${quiz ? quiz.topic : '0'} ?disabled=${working}>
             <option value="0">-- Select category</option>
-            ${Object.entries(topics).map(([k, v]) => html`<option value=${k} ?selected=${quiz?.topic == k} >${v}</option>`)}
+            ${Object.entries(topics).map(([k, v]) => html`<option value=${k} ?selected=${quiz?.topic == k}>${v}</option>
+            `)}
         </select>
     </label>
     <label class="editor-label layout">
@@ -60,18 +61,18 @@ function createQuizEditor(quiz, onSave) {
 
 export async function editorPage(ctx) {
     const quizId = ctx.params.id;
+
     let quiz = null;
     let questions = [];
+
     if (quizId) {
-        [quiz, questions] = await Promise.all([
-            getQuizById(quizId),
-            getQuestionsByQuizId(quizId, sessionStorage.getItem('userId'))
-        ]);
+        quiz = await getQuizById(quizId);
+        questions = await getQuestionsByQuizId(quizId, quiz.owner._id);
+        console.log(questions);
         quiz.questions = questions;
     }
 
     const { editor, updateEditor } = createQuizEditor(quiz, onSave);
-
     ctx.render(template(quiz, editor, updateCount));
 
     async function updateCount(change = 0) {
@@ -99,6 +100,7 @@ export async function editorPage(ctx) {
 
             if (quizId) {
                 await updateQuiz(quizId, data);
+                ctx.page.redirect(`/details/${quizId}`);
             } else {
                 const result = await createQuiz(data);
                 ctx.page.redirect('/edit/' + result.objectId);
