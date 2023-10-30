@@ -1,10 +1,11 @@
 const path = require('path');
+const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
     entry: './src/app.js',  // Entry point of your application
     output: {
         path: path.resolve(__dirname, 'dist'),  // Output directory
-        filename: 'bundle.js',  // Output filename
+        filename: 'app.js',  // Output filename
     },
     module: {
         rules: [
@@ -16,4 +17,12 @@ module.exports = {
             },
         ],
     },
+    plugins: [
+        new CopyPlugin({
+          patterns: [
+              { from: "index.html" },
+              { from: "static", to: "static" },
+        ],
+        }),
+    ],
 };
