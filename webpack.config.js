@@ -22,6 +22,7 @@ module.exports = {
           patterns: [
               { from: "index.html" },
               { from: "static", to: "static" },
+              { from: "assets", to: "assets" },
         ],
         }),
     ],
